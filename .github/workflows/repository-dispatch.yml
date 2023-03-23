@@ -1,0 +1,21 @@
+name: trigger events to another repository
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  testing-trigger:
+    runs-on: self-hosted
+    steps:
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v2.1.1
+        with:
+          token: ${{ secrets.ACCESS_TOKEN }}
+          # The full name of the repository to send the dispatch.
+          repository: manu-projects/manu-makefiles
+          # A custom webhook event name.
+          event-type: update-subtree-repository
+          # JSON payload with extra information about the webhook event that your action or worklow may use.
+          # https://docs.github.com/en/actions/learn-github-actions/contexts
+          client-payload: '{ "repository": "${{ github.repository }}" }' # optional, default is {}
